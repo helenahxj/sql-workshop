@@ -53,12 +53,56 @@ dbListTables(mydb)
 
 #Read a particular table
 dbReadTable(mydb, 'studentInfo')
-
+```
+```{r}
 #EXERCISE 1
 #Make two toy data sets with at least three variables and at least 30 rows each in them. Have a mix of numeric and character variables. Transfer these dataframes to your SQL database using the DBI commands. Name the tables whatever you like.
+dbGetQuery(mydb,"CREATE TABLE toy (
+  price INTEGER, 
+  kind TEXT
+  );")
 
+dbListTables(mydb)
 
+#Inserting data into the table
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 10, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 11, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 9, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 23, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 56, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 19, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 2, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 4, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 6, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 78, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 30, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 29, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 10, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 11, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 9, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 33, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 56, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 16, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 25, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 41, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 62, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 78, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 30, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 29, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 10, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 14, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 9, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 23, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 57, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 39, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 29, 'Bunny' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 40, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 6, 'Car' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 78, 'Doll' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 30, 'Jen' );")
+dbGetQuery(mydb, "INSERT INTO toy VALUES ( 29, 'Car' );")
 ```
+
 
 ## Getting into SQL - READING
 ```{r}
@@ -82,13 +126,16 @@ dbGetQuery(mydb, "SELECT COUNT(score) FROM studentAssessment WHERE score > 50;")
 
 #Using an AND statement
 dbGetQuery(mydb, "SELECT COUNT(*) FROM studentAssessment WHERE score > 50 AND id_assessment = '1752';")
+```
 
+```{r}
 #EXERCISE 2
 #Read one of your toy data tables, make sure the output is ordered in descending order, you rename one of the variables and the output is limited to the first 20 rows.
 
 #Read the other table according to a condition of one of the variables.
-
+dbGetQuery(mydb, "SELECT price, kind AS Category FROM toy ORDER BY price DESC LIMIT 20;")
 ```
+
 
 ## Getting into SQL - UPDATING
 ```{r}
@@ -122,12 +169,17 @@ dbGetQuery(mydb, "UPDATE studentAssessment SET score = 'NULL' WHERE id_student =
 dbGetQuery(mydb, "DELETE FROM studentAssessment WHERE id_student = 1;")
 
 dbGetQuery(mydb, "SELECT * FROM studentAssessment ORDER BY id_student LIMIT 10;")
+```
 
+```{r}
 #EXERCISE 3
 #Insert a new row in one of your toy data tables leaving one variable empty. Change one value in your other table. Display your new tables. Delete the row you edited and the row you inserted. 
-
-
+dbGetQuery(mydb, "INSERT INTO toy (price) VALUES (100);")
+dbGetQuery(mydb, "SELECT * FROM toy ORDER BY price DESC LIMIT 10;")
+dbGetQuery(mydb, "DELETE FROM toy WHERE kind IS NULL;")
+dbGetQuery(mydb, "SELECT * FROM toy ORDER BY price DESC LIMIT 10;")
 ```
+
 
 ## Add/Deleting Table
 ```{r}
@@ -158,7 +210,7 @@ dbGetQuery(mydb, "SELECT * FROM test;")
 #NULL is a state (similar to R), represents the lack of a value. But is not compatible with R backend so this code doesn't work as part of dbGetQuery()
 
 #This doesn't work because NULL is not a value (it cannot be "equal" to anything as it is ignored)
-SELECT * FROM test WHERE score = NULL;
+# SELECT * FROM test WHERE score = NULL;
 
 #Instead use "is"
 dbGetQuery(mydb, "SELECT * FROM test WHERE score is NULL;")
@@ -166,7 +218,7 @@ dbGetQuery(mydb, "SELECT * FROM test WHERE score is NULL;")
 #Delete a table
 dbGetQuery(mydb, "DROP TABLE test;")
 
-dbGetQuery(mydb, "SELECT * FROM test;") #This should produce an error
+# dbGetQuery(mydb, "SELECT * FROM test;") #This should produce an error
 
 #Delete a table if it exists
 dbGetQuery(mydb, "DROP TABLE IF EXISTS test;")
